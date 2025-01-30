@@ -1,0 +1,21 @@
+FROM node:18.14.0-alpine3.18   # Specify the exact version of Node for consistency
+
+# Set the working directory in the container
+WORKDIR /react-docker-example/
+
+# Copy package.json and package-lock.json first to leverage Docker caching
+COPY package.json /react-docker-example/
+COPY package-lock.json /react-docker-example/  # If you have a package-lock.json
+
+# Install dependencies
+RUN npm install --production --legacy-peer-deps  # Use --legacy-peer-deps to avoid peer dependency issues if needed
+
+# Copy the rest of the application
+COPY public/ /react-docker-example/public/
+COPY src/ /react-docker-example/src/
+
+# Expose port (adjust if your app listens on another port)
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
